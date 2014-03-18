@@ -1,8 +1,10 @@
 package HyperHuff;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
+import java.util.Map.Entry;
 
-public class Node {
+public class Node implements Comparable {
 	private Node left = null;
 	private Node right = null;
 	
@@ -44,15 +46,51 @@ public class Node {
 		return isLeaf;
 	}
 	
-	/*public ArrayList<Short, Boolean[]> getTable()
+	public short getValue()
 	{
-		ArrayList<Short, Boolean[]> res = new ArrayList<Short, Boolean[]>();
+		return value;
+	}
+	
+	boolean[] concat(boolean[] A, boolean[] B) {
+		   int aLen = A.length;
+		   int bLen = B.length;
+		   boolean[] C= new boolean[aLen+bLen];
+		   System.arraycopy(A, 0, C, 0, aLen);
+		   System.arraycopy(B, 0, C, aLen, bLen);
+		   return C;
+		}
+	
+	public ArrayList<TableEntry> getTable()
+	{
+		ArrayList<TableEntry> res = new ArrayList<TableEntry>();
 		
 		if(left.isLeaf())
 		{
-			
+			res.add(new TableEntry(left.getValue(), "0"));
+		} else {
+			ArrayList<TableEntry> tmp = left.getTable();
+			for(TableEntry entry : tmp)
+			{
+				res.add(new TableEntry(entry.value, "0"+entry.code));
+			}
+		}
+		if(right.isLeaf())
+		{
+			res.add(new TableEntry(right.getValue(), "1"));
+		} else {
+			ArrayList<TableEntry> tmp = right.getTable();
+			for(TableEntry entry : tmp)
+			{
+				res.add(new TableEntry(entry.value, "1"+entry.code));
+			}
 		}
 		
+		
 		return res;
-	}*/
+	}
+
+	@Override
+	public int compareTo(Object arg0) {
+		return this.count() - ((Node) arg0).count();
+	}
 }
