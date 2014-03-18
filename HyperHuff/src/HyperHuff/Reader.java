@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Reader
 {
@@ -56,17 +57,26 @@ public class Reader
 		}
 		return sizeY;
 	}
-	public int getTab()
+	public int getTab1()
 	{
+		ArrayList<ArrayList<Byte>> res = new ArrayList<ArrayList<Byte>>();
 		int sizeY=0;
 		try
 		{
+			cursor.reset();
 			byte[] data = new byte[4];
 			cursor.reset();
 			cursor.read(data);
 			cursor.readInt();
 			cursor.readInt();
-			cursor.
+			int sizetab1 = cursor.readInt();
+			for(int i=0;i<sizetab1;i++)
+			{
+				ArrayList<Byte> resint = new ArrayList<Byte>();
+				for(int j=0; j<)
+			}
+			
+			
 		} catch (IOException e)
 		{
 			System.out.println("erreur de lecture");

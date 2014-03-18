@@ -35,6 +35,7 @@ public class Saver
 		    	cursor.writeUTF("hf");
 		    	cursor.writeInt(sizeX);
 		    	cursor.writeInt(sizeY);
+		    	cursor.writeInt(tab1.length);
 		    	for(int i =0;i<tab1.length;i++)
 		    	{
 		    		cursor.write(tab1[i],0,tab1[i].length);
