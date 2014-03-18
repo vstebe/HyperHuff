@@ -59,21 +59,31 @@ public class Reader
 	}
 	public int getTab1()
 	{
-		ArrayList<ArrayList<Byte>> res = new ArrayList<ArrayList<Byte>>();
+		ArrayList<byte[]> res = new ArrayList<byte[]>();
 		int sizeY=0;
 		try
 		{
 			cursor.reset();
-			byte[] data = new byte[4];
-			cursor.reset();
-			cursor.read(data);
-			cursor.readInt();
-			cursor.readInt();
+			cursor.skipBytes(16);
 			int sizetab1 = cursor.readInt();
+			int longueur;
+			byte[] data;
+			int pos=16;
 			for(int i=0;i<sizetab1;i++)
 			{
+				cursor.reset();
+				cursor.skipBytes(pos);
 				ArrayList<Byte> resint = new ArrayList<Byte>();
-				for(int j=0; j<)
+				data = new byte[4];
+				cursor.read(data);
+				cursor.read(data);
+				longueur = Integer.valueOf(new String(data));
+				byte[] buffer = new byte[longueur];
+				cursor.reset();
+				cursor.skipBytes(pos);
+				cursor.read(buffer);
+				res.add(buffer);
+				pos += longueur;
 			}
 			
 			
