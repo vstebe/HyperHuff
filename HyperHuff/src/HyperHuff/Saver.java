@@ -13,7 +13,7 @@ import java.util.Arrays;
 public class Saver
 {
 
-	static public void save(int sizeX, int sizeY, byte[] tab, String url)
+	static public void save(int sizeX, int sizeY,byte[][] tab1, byte[] tab2, String url)
 	{
 	
 		File output = new File(url);
@@ -35,7 +35,11 @@ public class Saver
 		    	cursor.writeUTF("hf");
 		    	cursor.writeInt(sizeX);
 		    	cursor.writeInt(sizeY);
-		    	cursor.write(tab, 0,tab.length);
+		    	for(int i =0;i<tab1.length;i++)
+		    	{
+		    		cursor.write(tab1[i],0,tab1[i].length);
+		    	}
+		    	cursor.write(tab2, 0,tab2.length);
 		        cursor.close();
 		    }
 		    catch (IOException exception)
