@@ -11,7 +11,7 @@ public class Huffman {
 		this.nodes = nodes;
 	}
 	
-	public void process()
+	public ArrayList<TableEntry> process()
 	{
 		while(nodes.size() != 1)
 		{
@@ -28,10 +28,7 @@ public class Huffman {
 		
 		ArrayList<TableEntry> list = nodes.get(0).getTable();
 		
-		for(TableEntry entry : list)
-		{
-			System.out.println(entry.value + " : " + entry.code);
-		}
+		return list;
 	}
 	
 }
