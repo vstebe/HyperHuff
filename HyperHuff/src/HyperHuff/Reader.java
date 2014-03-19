@@ -54,6 +54,7 @@ public class Reader
 			input = new FileInputStream(url);
 			cursor = new DataInputStream(input);
 			cursor.read(data);
+			cursor.readInt();
 			sizeY = cursor.readInt();
 		} catch (IOException e)
 		{
