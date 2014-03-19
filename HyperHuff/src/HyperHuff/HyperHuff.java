@@ -14,14 +14,16 @@ public class HyperHuff {
 
 	public static void main(String[] args) {
 		
-		try {
-			GreyImage img = GreyImage.loadPGM("/home/vincent/ironmaiden.pgm");
+		try 
+		{
+			GreyImage img = GreyImage.loadPGM("D:\\workspace\\repositorygit\\HyperHuff\\HyperHuff\\res\\barbara.pgm");
 			
 			HuffFile f = new HuffFile();
 			f.save(img);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 		
 		
 

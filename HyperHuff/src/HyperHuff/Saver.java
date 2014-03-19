@@ -32,7 +32,7 @@ public class Saver
 		    DataOutputStream cursor = new DataOutputStream(outputstream);
 		    try
 		    {
-		    	cursor.writeUTF("hf");
+		    	cursor.writeChars("hf");
 		    	cursor.writeInt(sizeX);
 		    	cursor.writeInt(sizeY);
 		    	cursor.writeInt(tab1.length);
