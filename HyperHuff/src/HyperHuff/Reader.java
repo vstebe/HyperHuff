@@ -57,7 +57,7 @@ public class Reader
 		}
 		return sizeY;
 	}
-	public int getTab1()
+	public byte[][] getArbre()
 	{
 		ArrayList<byte[]> res = new ArrayList<byte[]>();
 		int sizeY=0;
@@ -69,16 +69,17 @@ public class Reader
 			int longueur;
 			byte[] data;
 			int pos=16;
+			byte[] buffer;
 			for(int i=0;i<sizetab1;i++)
 			{
 				cursor.reset();
 				cursor.skipBytes(pos);
 				ArrayList<Byte> resint = new ArrayList<Byte>();
-				data = new byte[4];
+				data = new byte[1];
 				cursor.read(data);
 				cursor.read(data);
-				longueur = Integer.valueOf(new String(data));
-				byte[] buffer = new byte[longueur];
+				longueur = Integer.valueOf(new String(data))/8+3;
+				buffer = new byte[longueur];
 				cursor.reset();
 				cursor.skipBytes(pos);
 				cursor.read(buffer);
@@ -91,7 +92,49 @@ public class Reader
 		{
 			System.out.println("erreur de lecture");
 		}
-		return sizeY;
+		byte[][] resfinal = null;
+		 res.toArray(resfinal);
+		return resfinal;
+	}
+	public byte[] getSequence()
+	{
+		byte[] resfinal = null;
+		try
+		{
+			cursor.reset();
+			cursor.skipBytes(16);
+			int sizetab1 = cursor.readInt();
+			int longueur,longueur2 = 0;
+			byte[] data;
+			int pos=16;
+			
+			for(int i=0;i<sizetab1;i++)
+			{
+				cursor.reset();
+				cursor.skipBytes(pos);
+				data = new byte[1];
+				cursor.read(data);
+				cursor.read(data);
+				longueur = Integer.valueOf(new String(data))/8+3;
+				cursor.reset();
+				cursor.skipBytes(pos);
+				pos += longueur;
+			}
+			data = new byte[1];
+			
+			while(cursor.read(data) != -1)
+			{
+				longueur2++;
+				
+			}
+			resfinal = new byte[longueur2];
+			cursor.read(resfinal);
+			
+		} catch (IOException e)
+		{
+			System.out.println("erreur de lecture");
+		}
+		return resfinal;
 	}
 	
 }
