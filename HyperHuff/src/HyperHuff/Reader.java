@@ -10,12 +10,15 @@ public class Reader
 {
 	private FileInputStream input;
 	DataInputStream cursor;
+	String url;
 	
 	public Reader(String url)
 	{
 		try
 		{
+			this.url=url;
 			input = new FileInputStream(url);
+			
 			cursor = new DataInputStream(input);
 
 		} catch (FileNotFoundException e)
@@ -32,7 +35,8 @@ public class Reader
 		try
 		{
 			byte[] data = new byte[4];
-			cursor.reset();
+			input = new FileInputStream(url);
+			cursor = new DataInputStream(input);
 			cursor.read(data);
 			sizeX = cursor.readInt();
 		} catch (IOException e)
@@ -47,9 +51,9 @@ public class Reader
 		try
 		{
 			byte[] data = new byte[4];
-			cursor.reset();
+			input = new FileInputStream(url);
+			cursor = new DataInputStream(input);
 			cursor.read(data);
-			cursor.readInt();
 			sizeY = cursor.readInt();
 		} catch (IOException e)
 		{
@@ -63,7 +67,8 @@ public class Reader
 		int sizeY=0;
 		try
 		{
-			cursor.reset();
+			input = new FileInputStream(url);
+			cursor = new DataInputStream(input);
 			cursor.skipBytes(16);
 			int sizetab1 = cursor.readInt();
 			int longueur;
@@ -72,7 +77,8 @@ public class Reader
 			byte[] buffer;
 			for(int i=0;i<sizetab1;i++)
 			{
-				cursor.reset();
+				input = new FileInputStream(url);
+				cursor = new DataInputStream(input);
 				cursor.skipBytes(pos);
 				ArrayList<Byte> resint = new ArrayList<Byte>();
 				data = new byte[1];
@@ -80,7 +86,8 @@ public class Reader
 				cursor.read(data);
 				longueur = Integer.valueOf(new String(data))/8+3;
 				buffer = new byte[longueur];
-				cursor.reset();
+				input = new FileInputStream(url);
+				cursor = new DataInputStream(input);
 				cursor.skipBytes(pos);
 				cursor.read(buffer);
 				res.add(buffer);
@@ -101,7 +108,8 @@ public class Reader
 		byte[] resfinal = null;
 		try
 		{
-			cursor.reset();
+			input = new FileInputStream(url);
+			cursor = new DataInputStream(input);
 			cursor.skipBytes(16);
 			int sizetab1 = cursor.readInt();
 			int longueur,longueur2 = 0;
@@ -110,13 +118,15 @@ public class Reader
 			
 			for(int i=0;i<sizetab1;i++)
 			{
-				cursor.reset();
+				input = new FileInputStream(url);
+				cursor = new DataInputStream(input);
 				cursor.skipBytes(pos);
 				data = new byte[1];
 				cursor.read(data);
 				cursor.read(data);
 				longueur = Integer.valueOf(new String(data))/8+3;
-				cursor.reset();
+				input = new FileInputStream(url);
+				cursor = new DataInputStream(input);
 				cursor.skipBytes(pos);
 				pos += longueur;
 			}
