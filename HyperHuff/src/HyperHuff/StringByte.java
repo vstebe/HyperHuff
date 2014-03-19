@@ -12,7 +12,7 @@ public class StringByte {
 		 
 		 for(int i=0; i<nbBytes; i++)
 		 {
-			 int start = i*8+1;
+			 int start = i*8;
 			 int end = ((i+1)*8 < arr.length()) ? (i+1)*8 : arr.length();
 			 
 			 String substring = arr.substring(start, end);
@@ -24,13 +24,30 @@ public class StringByte {
 				 substring+="0";
 				 supp++;
 			 }
-			 String prefix = (arr.charAt(start-1) == '1') ? "+" : "-";
+			 //String prefix = (arr.charAt(start-1) == '1') ? "-" : "+";
 			 
-			 res[i] = Byte.parseByte(prefix + substring,2);
+			 res[i] = (byte) Integer.parseInt(substring, 2);
 		 }
 		 
 		 return nbBytes*8-supp;
 	 }
+	
+	
+	public static StringBuffer toString(byte[] bytes)
+	{
+		StringBuffer buffer = new StringBuffer();
+		int i = 0;
+		System.out.println(bytes.length);
+		for(byte b : bytes)
+		{
+			//System.out.println((double)i/(double)bytes.length);
+			buffer.append(String.format("%8s", Integer.toBinaryString((b) & 0xFF)).replace(' ', '0'));
+			//if(i%1000 == 0)
+				//System.out.println(i);
+			i++;
+		}
+		return buffer;
+	}
 	
 	public static ArrayList<Byte> encodebool(String[] arr)
 	 {

@@ -1,5 +1,6 @@
 package image;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -38,7 +39,6 @@ public class HuffFile {
 		
 		ArrayList<TableEntry> table = h.process();
 		
-		String[] codes = new String[img.getSizeData()];
 		
 		StringBuffer buffer = new StringBuffer();
 		
@@ -78,8 +78,57 @@ public class HuffFile {
 	//		System.out.println(b);
 	//	}
 		
+		openBytes(bytesImage, table);
+		
+	}
+	
+	
+	public void openBytes(byte[] bytes, ArrayList<TableEntry> table)
+	{
+		String img = StringByte.toString(bytes).toString();
+		
+		int dimX = 1600;
+		int dimY = 1200;
+		
+		System.out.println("taile : " + img.length());
+		
+		short[] values = new short[dimX*dimY];
+		//Collections.sort(table);
+		int index = 0;
+		for(int i=0; (i<dimX*dimY) && index < img.length(); i++)
+		{
+			//String str = img.toString();
+			short value = 0;
+			String code = "";
+			for(TableEntry entry : table)
+			{
+				if((index + entry.code.length()) < img.length() &&  img.subSequence(index, index + entry.code.length()).equals(entry.code))
+				{
+					value = entry.value;
+					code = entry.code;
+					break;
+				}
+					
+			}
+			
+			//f(i%1000 == 0)
+			//	System.out.println(i);
+			
+			//img.delete(0, code.length());
+			index+=code.length();
+			values[i] = value;
+			
+		}
+		
 
 		
+		GreyImage img2 = new GreyImage(dimX, dimY, values);
+		try {
+			img2.save("/tmp/pgm.pgm");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	 

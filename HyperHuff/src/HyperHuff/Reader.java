@@ -92,7 +92,7 @@ public class Reader
 		{
 			System.out.println("erreur de lecture");
 		}
-		byte[][] resfinal = null;
+		byte[][] resfinal = new byte[res.size()][];
 		 res.toArray(resfinal);
 		return resfinal;
 	}

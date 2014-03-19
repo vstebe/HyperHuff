@@ -1,6 +1,6 @@
 package HyperHuff;
 
-public class TableEntry {
+public class TableEntry implements Comparable {
 	public short value;
 	public String code;
 	
@@ -25,5 +25,10 @@ public class TableEntry {
 		System.arraycopy(bytes, 0, res, 2, bytes.length);
 		
 		return res;
+	}
+
+	@Override
+	public int compareTo(Object arg0) {
+		return ((TableEntry) arg0).code.length() - code.length();
 	}
 }
