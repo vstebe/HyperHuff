@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 
 import HyperHuff.Huffman;
 import HyperHuff.Node;
+import HyperHuff.Reader;
 import HyperHuff.Saver;
 import HyperHuff.StringByte;
 import HyperHuff.TableEntry;
@@ -60,6 +61,10 @@ public class HuffFile {
 			buffer.append(code);
 		}
 		
+		
+		System.out.println("debut buffer : ");
+		System.out.println(buffer.substring(0, 50));
+		
 		byte[] bytesImage = new byte[(int)Math.ceil(((double)buffer.length())/8.f)];
 		
 		StringByte.encodebool(buffer, bytesImage);
@@ -71,6 +76,8 @@ public class HuffFile {
 			bytesTab[j] = table.get(j).toBytes();
 		}
 		
+		System.out.println("buffer length : " + buffer.length());
+		
 		Saver.save(img.getSizeX(), img.getSizeY(), bytesTab, bytesImage, "/tmp/test.huf");
 		
 		//for(byte b : bytes)
@@ -78,17 +85,34 @@ public class HuffFile {
 	//		System.out.println(b);
 	//	}
 		
-		openBytes(bytesImage, table);
+		//openBytes(img.getSizeX(), img.getSizeY(), bytesImage, table);
 		
 	}
 	
+	public void openHuf(String str)
+	{
+		Reader r = new Reader(str);
+		byte[][] tableBytes = r.getArbre();
+		ArrayList<TableEntry> table = new ArrayList<TableEntry>();
+		System.out.println("a");
+		for(int i=0; i<tableBytes.length; i++)
+		{
+			table.add(TableEntry.fromBytes(tableBytes[i]));
+		}
+		
+		System.out.println("nbEntries : " + table.size());
+		
+		openBytes(r.getSizeX(), r.getSizeY(), r.getSequence(), table);
+		System.out.println("b");
+	}
 	
-	public void openBytes(byte[] bytes, ArrayList<TableEntry> table)
+	
+	public void openBytes(int dimX, int dimY, byte[] bytes, ArrayList<TableEntry> table)
 	{
 		String img = StringByte.toString(bytes).toString();
 		
-		int dimX = 1600;
-		int dimY = 1200;
+		System.out.println("debut buffer : ");
+		System.out.println(img.substring(0, 50));
 		
 		System.out.println("taile : " + img.length());
 		
@@ -106,6 +130,7 @@ public class HuffFile {
 				{
 					value = entry.value;
 					code = entry.code;
+					//System.out.println("found");
 					break;
 				}
 					
@@ -117,6 +142,11 @@ public class HuffFile {
 			//img.delete(0, code.length());
 			index+=code.length();
 			values[i] = value;
+			
+			///if(code.length() == 0)
+			//	System.out.println("not foudn !!");
+			
+			//System.out.println(value + " " + code);
 			
 		}
 		

@@ -16,7 +16,7 @@ public class HyperHuff {
 		
 		try 
 		{
-			GreyImage img = GreyImage.loadPGM("D:\\workspace\\repositorygit\\HyperHuff\\HyperHuff\\res\\barbara.pgm");
+			GreyImage img = GreyImage.loadPGM("/home/vincent/barbara.pgm");
 			
 			HuffFile f = new HuffFile();
 			f.save(img);

@@ -21,7 +21,7 @@ public class StringByte {
 			 
 			 while(substring.length() <7)
 			 {
-				 substring+="0";
+				 substring="0"+substring;
 				 supp++;
 			 }
 			 //String prefix = (arr.charAt(start-1) == '1') ? "-" : "+";
@@ -37,11 +37,13 @@ public class StringByte {
 	{
 		StringBuffer buffer = new StringBuffer();
 		int i = 0;
-		System.out.println(bytes.length);
+		//System.out.println(bytes.length);
 		for(byte b : bytes)
 		{
 			//System.out.println((double)i/(double)bytes.length);
-			buffer.append(String.format("%8s", Integer.toBinaryString((b) & 0xFF)).replace(' ', '0'));
+			//buffer.append(String.format("%8s", Integer.toBinaryString((b) & 0xFF)).replace(' ', '0'));
+			
+			buffer.append(""+(int)(b & 0xFF));
 			//if(i%1000 == 0)
 				//System.out.println(i);
 			i++;

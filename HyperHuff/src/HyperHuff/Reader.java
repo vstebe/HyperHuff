@@ -60,8 +60,7 @@ public class Reader
 				{
 					cursor.read(pixel);
 					cursor.read(data);
-					longueurligne =convertByteToInt(data)/8+3;
-					System.out.println(longueurligne);
+					longueurligne =(int)Math.ceil(((double)convertByteToInt(data))/8)+2;
 					resligne = new byte[longueurligne];
 					resligne[0] = pixel[0];
 					resligne[1] = data[0];
@@ -75,14 +74,21 @@ public class Reader
 				}
 				this.arbre = res;
 				// lecture sequence
-				int longueursequence=0;
+				
+				ArrayList<Byte> bytesSeqList = new ArrayList<Byte>();
+				
 				while(cursor.read(data) != -1)
 				{
-					longueursequence++;
+					bytesSeqList.add(data[0]);
 				}
-				byte[] res2 = new byte[longueursequence];
-				cursor.read(res2);
+				byte[] res2 = new byte[bytesSeqList.size()];
+				
+				for(int i=0; i<bytesSeqList.size(); i++)
+					res2[i] = bytesSeqList.get(i);
+				
 				this.sequence=res2;
+				
+				System.out.println("le : " + res2.length);
 				
 			} catch (IOException e)
 			{
@@ -101,10 +107,11 @@ public class Reader
 	}
 	public int convertByteToInt(byte[] b)
 	{           
-	    int value= 0;
+	   /* int value= 0;
 	    for(int i=0; i<b.length; i++)
 	       value = (value << 8) | b[i];     
-	    return value;       
+	    return value;       */
+		return (int) b[0];
 	}
 }
 		
