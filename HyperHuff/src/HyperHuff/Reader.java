@@ -48,7 +48,6 @@ public class Reader
 				
 				this.sizeY = cursor.readInt();
 				int sizetab = cursor.readInt();
-				System.out.println(prefixe + " " + sizeX + " " + sizeY + " " + sizetab);
 				byte[] data = new byte[1];
 				byte[] pixel = new byte[1];
 				byte[] bytecourant = new byte[1];
@@ -88,7 +87,6 @@ public class Reader
 				
 				this.sequence=res2;
 				
-				System.out.println("le : " + res2.length);
 				
 			} catch (IOException e)
 			{

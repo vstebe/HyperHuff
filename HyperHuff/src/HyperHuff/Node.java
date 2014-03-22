@@ -4,7 +4,7 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Map.Entry;
 
-public class Node implements Comparable {
+public class Node implements Comparable<Node> {
 	private Node left = null;
 	private Node right = null;
 	
@@ -14,6 +14,11 @@ public class Node implements Comparable {
 	
 	private int frequency = 0;
 	
+	/**
+	 * Création d'un node parent en donnant ses enfants
+	 * @param left
+	 * @param right
+	 */
 	public Node(Node left, Node right)
 	{
 		this.left = left;
@@ -21,6 +26,11 @@ public class Node implements Comparable {
 		this.isLeaf = false;
 	}
 	
+	/**
+	 * Création d'un node feuille
+	 * @param value valeur de gris du pixel
+	 * @param frequency
+	 */
 	public Node(short value, int frequency )
 	{
 		this.value = value;
@@ -28,6 +38,10 @@ public class Node implements Comparable {
 		this.frequency = frequency;
 	}
 	
+	/**
+	 * Calcul la fréquence totale du noeud (si feuille = sa propre fréquence, sinon, en fonction des fils)
+	 * @return
+	 */
 	public int count()
 	{
 		int res = 0;
@@ -51,29 +65,29 @@ public class Node implements Comparable {
 		return value;
 	}
 	
-	boolean[] concat(boolean[] A, boolean[] B) {
-		   int aLen = A.length;
-		   int bLen = B.length;
-		   boolean[] C= new boolean[aLen+bLen];
-		   System.arraycopy(A, 0, C, 0, aLen);
-		   System.arraycopy(B, 0, C, aLen, bLen);
-		   return C;
-		}
-	
+	/**
+	 * Renvoie la table de correspondance de ce noeud
+	 * On récupère la table de correspondance des noeuds fils, et on concatène les codes par 0 ou 1 en fonction de
+	 * fils gauche ou fils droit
+	 * @return
+	 */
 	public ArrayList<TableEntry> getTable()
 	{
 		ArrayList<TableEntry> res = new ArrayList<TableEntry>();
 		
+		//Noeud gauche
 		if(left.isLeaf())
 		{
-			res.add(new TableEntry(left.getValue(), "0"));
+			res.add(new TableEntry(left.getValue(), "0")); //Dans le cas d'une feuille, la table est directe
 		} else {
-			ArrayList<TableEntry> tmp = left.getTable();
+			ArrayList<TableEntry> tmp = left.getTable(); //Table de ce noeud
 			for(TableEntry entry : tmp)
 			{
+				//On ajoute à la table finale cette table-ci, en concatenant le code
 				res.add(new TableEntry(entry.value, "0"+entry.code));
 			}
 		}
+		//Procédé identique pour le noeud droit
 		if(right.isLeaf())
 		{
 			res.add(new TableEntry(right.getValue(), "1"));
@@ -89,8 +103,9 @@ public class Node implements Comparable {
 		return res;
 	}
 
+	//Permet de trier les noeuds par ordre croissant de réccurence
 	@Override
-	public int compareTo(Object arg0) {
-		return this.count() - ((Node) arg0).count();
+	public int compareTo(Node arg0) {
+		return this.count() - arg0.count();
 	}
 }

@@ -14,8 +14,10 @@ import HyperHuff.StringByte;
 import HyperHuff.TableEntry;
 
 public class HuffFile {
-	public void save(GreyImage img)
+	public void save(GreyImage img, String filename)
 	{
+		
+		//Création des nodes de départ pour l'arbre. On compte le nombre d'occurence de chaque valeur de gris
 		HashMap<Short, Integer> caracters = new HashMap<Short, Integer>();
 		for(int i=0; i<img.getSizeData(); i++)
 		{
@@ -25,7 +27,7 @@ public class HuffFile {
 			else
 				caracters.put(s, 0);
 		}
-		
+		//On transforme le hashmap (valeur pixel - nb occurences) en liste de nodes
 		Node[] nodes = new Node[caracters.size()];
 		int i=0;
 		for(Entry<Short, Integer> entry : caracters.entrySet())
@@ -33,133 +35,107 @@ public class HuffFile {
 			nodes[i] = new Node(entry.getKey(), entry.getValue());
 			i++;
 		}
-		
-		
-		
+
+		//Qu'on envoie à Huffman pour la compression
 		Huffman h = new Huffman(new ArrayList<Node>(Arrays.asList(nodes)));
 		
-		ArrayList<TableEntry> table = h.process();
+		ArrayList<TableEntry> table = h.process(); //On a notre table de correspondance
 		
 		
+		//On s'attaque maintenant à la compression elle-même
 		StringBuffer buffer = new StringBuffer();
 		
+		//Pour chaque pixel
 		for(int j=0; j<img.getSizeData(); j++)
 		{
 			short value = img.getPixel(j);
 			String code = "";
 			for(TableEntry entry : table)
-			{
+			{ //Parcours de la table
 				if(entry.value == value)
 				{
 					code = entry.code;
 					break;
 				}
 			}
-			//codes[j] = code;
-			//System.out.println(code);
-			
-			buffer.append(code);
+		
+			buffer.append(code);//On enregistre le code dans le buffer
 		}
 		
 		
-		System.out.println("debut buffer : ");
-		System.out.println(buffer.substring(0, 50));
-		
+		//Init du tablaeu de bytes
 		byte[] bytesImage = new byte[(int)Math.ceil(((double)buffer.length())/8.f)];
 		
+		//On transforme le buffer de String en bytes pour l'enregistrement
 		StringByte.encodebool(buffer, bytesImage);
 		
+		//Enregistrement du tableau de correspondance en bytes
 		byte[][] bytesTab = new byte[table.size()][];
 		
 		for(int j=0; j<table.size(); j++)
 		{
 			bytesTab[j] = table.get(j).toBytes();
 		}
-		
-		System.out.println("buffer length : " + buffer.length());
-		
-		Saver.save(img.getSizeX(), img.getSizeY(), bytesTab, bytesImage, "/tmp/test.huf");
-		
-		//for(byte b : bytes)
-		//{
-	//		System.out.println(b);
-	//	}
-		
-		//openBytes(img.getSizeX(), img.getSizeY(), bytesImage, table);
+				
+		//On envoie ces tableaux au Saver qui fera l'enregistrement
+		Saver.save(img.getSizeX(), img.getSizeY(), bytesTab, bytesImage, filename);
+
 		
 	}
 	
-	public void openHuf(String str)
+	public GreyImage openHuf(String str)
 	{
+		//On ouvre le fichier via Reader qui nous donne les tableaux de bytes
 		Reader r = new Reader(str);
+		
+		//Reconstruction de la table de correspondance
 		byte[][] tableBytes = r.getArbre();
 		ArrayList<TableEntry> table = new ArrayList<TableEntry>();
-		System.out.println("a");
 		for(int i=0; i<tableBytes.length; i++)
 		{
 			table.add(TableEntry.fromBytes(tableBytes[i]));
 		}
 		
-		System.out.println("nbEntries : " + table.size());
-		
-		openBytes(r.getSizeX(), r.getSizeY(), r.getSequence(), table);
-		System.out.println("b");
-	}
-	
-	
-	public void openBytes(int dimX, int dimY, byte[] bytes, ArrayList<TableEntry> table)
-	{
+		//On reconstruit l'image via la table et la séquence de bytes
+		int dimX = r.getSizeX();
+		int dimY = r.getSizeY();
+		byte[] bytes = r.getSequence();
+
+		//On transforme le tableau de bytes en String simple
 		String img = StringByte.toString(bytes).toString();
 		
-		System.out.println("debut buffer : ");
-		System.out.println(img.substring(0, 50));
-		
-		System.out.println("taile : " + img.length());
-		
 		short[] values = new short[dimX*dimY];
-		//Collections.sort(table);
-		int index = 0;
+		
+		int index = 0; //Position courante dans le String de l'image
+		
+		//Pour chaque pixel
 		for(int i=0; (i<dimX*dimY) && index < img.length(); i++)
 		{
-			//String str = img.toString();
 			short value = 0;
 			String code = "";
+			//On cherche le code à utiliser
 			for(TableEntry entry : table)
 			{
 				if((index + entry.code.length()) < img.length() &&  img.subSequence(index, index + entry.code.length()).equals(entry.code))
 				{
 					value = entry.value;
 					code = entry.code;
-					//System.out.println("found");
 					break;
 				}
 					
 			}
-			
-			//f(i%1000 == 0)
-			//	System.out.println(i);
-			
-			//img.delete(0, code.length());
-			index+=code.length();
+
+			index+=code.length(); //On continue le parcours
 			values[i] = value;
-			
-			///if(code.length() == 0)
-			//	System.out.println("not foudn !!");
-			
-			//System.out.println(value + " " + code);
 			
 		}
 		
 
 		
-		GreyImage img2 = new GreyImage(dimX, dimY, values);
-		try {
-			img2.save("/tmp/pgm.pgm");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		return new GreyImage(dimX, dimY, values);
 	}
+	
+
 	
 	 
 }
