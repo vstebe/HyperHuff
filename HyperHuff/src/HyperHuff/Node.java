@@ -73,32 +73,39 @@ public class Node implements Comparable<Node> {
 	{
 		ArrayList<TableEntry> res = new ArrayList<TableEntry>();
 		
-		//Noeud gauche
-		if(left.isLeaf())
+		if(isLeaf())
 		{
-			res.add(new TableEntry(left.getValue(), "0")); //Dans le cas d'une feuille, la table est directe
+			res.add(new TableEntry(value, "0"));
 		} else {
-			ArrayList<TableEntry> tmp = left.getTable(); //Table de ce noeud
-			for(TableEntry entry : tmp)
-			{
-				//On ajoute à la table finale cette table-ci, en concatenant le code
-				res.add(new TableEntry(entry.value, "0"+entry.code));
-			}
-		}
-		//Procédé identique pour le noeud droit
-		if(right.isLeaf())
-		{
-			res.add(new TableEntry(right.getValue(), "1"));
-		} else {
-			ArrayList<TableEntry> tmp = right.getTable();
-			for(TableEntry entry : tmp)
-			{
-				res.add(new TableEntry(entry.value, "1"+entry.code));
-			}
-		}
 		
+			//Noeud gauche
+			if(left.isLeaf())
+			{
+				res.add(new TableEntry(left.getValue(), "0")); //Dans le cas d'une feuille, la table est directe
+			} else {
+				ArrayList<TableEntry> tmp = left.getTable(); //Table de ce noeud
+				for(TableEntry entry : tmp)
+				{
+					//On ajoute à la table finale cette table-ci, en concatenant le code
+					res.add(new TableEntry(entry.value, "0"+entry.code));
+				}
+			}
+			//Procédé identique pour le noeud droit
+			if(right.isLeaf())
+			{
+				res.add(new TableEntry(right.getValue(), "1"));
+			} else {
+				ArrayList<TableEntry> tmp = right.getTable();
+				for(TableEntry entry : tmp)
+				{
+					res.add(new TableEntry(entry.value, "1"+entry.code));
+				}
+			}
+			
+		}
 		
 		return res;
+		
 	}
 
 	//Permet de trier les noeuds par ordre croissant de réccurence
