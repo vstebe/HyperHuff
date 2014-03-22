@@ -1,8 +1,6 @@
 package HyperHuff;
 
-import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
-import java.util.Map.Entry;
 
 public class Node implements Comparable<Node> {
 	private Node left = null;
