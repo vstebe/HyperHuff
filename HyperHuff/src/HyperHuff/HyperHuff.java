@@ -15,7 +15,7 @@ public class HyperHuff {
 
 		System.out.println("Compression de Huffman");
 		System.out.println("1. Compression PGM -> HUF");
-		System.out.println("2. Compression HUF -> PGM");
+		System.out.println("2. Décompression HUF -> PGM");
 		System.out.println("Choix ?");
 
 		Scanner s = new Scanner(System.in);
