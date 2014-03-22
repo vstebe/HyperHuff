@@ -12,10 +12,17 @@ import java.util.Arrays;
 
 public class Saver
 {
-
+	/**
+	 * Enregistre byte par byte le fichier .huff
+	 * @param sizeX longueur de l'image
+	 * @param sizeY hauteur de l'image
+	 * @param tab1 tableau contennant les noeuds codées
+	 * @param tab2 tableau contenant le nouveau code
+	 * @param url l'url où enregistré le fichier
+	 */
 	static public void save(int sizeX, int sizeY,byte[][] tab1, byte[] tab2, String url)
 	{
-	
+		// création du fichier pour l'écriture
 		File output = new File(url);
 		try
 		{
@@ -28,18 +35,22 @@ public class Saver
 		 
 		try
 		{
+			// Création des instances nécessaires à l'écriture
 		    FileOutputStream outputstream = new FileOutputStream(output);
 		    DataOutputStream cursor = new DataOutputStream(outputstream);
 		    try
 		    {
-		    	cursor.writeChars("hf");
+		    	// header ----------------------------------
+		    	cursor.writeChars("hf"); // signature
 		    	cursor.writeInt(sizeX);
 		    	cursor.writeInt(sizeY);
 		    	cursor.writeInt(tab1.length);
+		    	// premier tableau -------------------------
 		    	for(int i =0;i<tab1.length;i++)
 		    	{
 		    		cursor.write(tab1[i],0,tab1[i].length);
 		    	}
+		    	// deuxième tableau ------------------------
 		    	cursor.write(tab2, 0,tab2.length);
 		        cursor.close();
 		    }

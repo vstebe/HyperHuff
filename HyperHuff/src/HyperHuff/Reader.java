@@ -14,6 +14,7 @@ public class Reader
 	private byte[] sequence;
 	private byte[][] arbre;
 	
+	//------------------000000 Getters et Setters 000000--------------------------------
 	public int getSizeX()
 	{
 		return sizeX;
@@ -30,6 +31,11 @@ public class Reader
 	{
 		return arbre;
 	}
+	//--------------------------------------------------------------------------------
+	/**
+	 * Constructeur qui permet d'initialiser les variables de retour 
+	 * @param url du fichier .huff
+	 */
 	public Reader(String url)
 	{
 		try
@@ -41,6 +47,7 @@ public class Reader
 			
 			try
 			{
+				// signature sur 2 char
 				String prefixe = ""+ cursor.readChar();
 				prefixe += cursor.readChar();
 				
@@ -105,10 +112,6 @@ public class Reader
 	}
 	public int convertByteToInt(byte[] b)
 	{           
-	   /* int value= 0;
-	    for(int i=0; i<b.length; i++)
-	       value = (value << 8) | b[i];     
-	    return value;       */
 		return (int) b[0];
 	}
 }
