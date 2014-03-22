@@ -13,14 +13,16 @@ public class Binary {
 		
 HuffFile f = new HuffFile();
 
-//f.openHuf("/tmp/test.huf");
+f.openHuf("/tmp/test.huf");
 
-StringBuffer str = new StringBuffer("11111110");
+StringBuffer str = new StringBuffer("0100010");
 byte[] bytes = new byte[2];
 StringByte.encodebool(str, bytes);
 System.out.println(bytes[0]);
 System.out.println(StringByte.toString(bytes));
-System.out.println(Integer.parseInt("11111111", 2));
+
+//byte b = 2;
+//System.out.println(StringByte.toString(new byte[]{2}));
 	}
 
 }

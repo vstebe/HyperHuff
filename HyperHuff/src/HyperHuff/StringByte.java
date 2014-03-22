@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class StringByte {
-	public static int encodebool(StringBuffer arr, byte[] res)
+	/*public static int encodebool(StringBuffer arr, byte[] res)
 	 {
 		 int nbBytes = (int)Math.ceil((float)(arr.length())/8.f);
 		 
@@ -21,7 +21,7 @@ public class StringByte {
 			 
 			 while(substring.length() <7)
 			 {
-				 substring="0"+substring;
+				 substring=substring+"0";
 				 supp++;
 			 }
 			 //String prefix = (arr.charAt(start-1) == '1') ? "-" : "+";
@@ -30,10 +30,31 @@ public class StringByte {
 		 }
 		 
 		 return nbBytes*8-supp;
-	 }
+	 }*/
 	
 	
-	public static StringBuffer toString(byte[] bytes)
+	public static int encodebool(StringBuffer arr, byte[] res)
+	{
+		int currentByte = -1;
+		int currentBit;
+		for(int i=0; i<arr.length(); i++)
+		{
+			currentBit = i%8;
+			if(currentBit == 0)
+				currentByte++;
+			
+			if(arr.charAt(i) == '1')
+				res[currentByte] = (byte) (res[currentByte] | (1 << currentBit));
+			else
+				res[currentByte] = (byte) (res[currentByte] & ~(1 << currentBit));
+			
+		}
+		
+		return arr.length();
+	}
+	
+	
+	/*public static StringBuffer toString(byte[] bytes)
 	{
 		StringBuffer buffer = new StringBuffer();
 		int i = 0;
@@ -41,13 +62,34 @@ public class StringByte {
 		for(byte b : bytes)
 		{
 			//System.out.println((double)i/(double)bytes.length);
-			//buffer.append(String.format("%8s", Integer.toBinaryString((b) & 0xFF)).replace(' ', '0'));
+			StringBuffer buffer2 = new StringBuffer(String.format("%8s", Integer.toBinaryString((b) & 0xFF)).replace(" ", ""));
 			
-			buffer.append(""+(int)(b & 0xFF));
+			while(buffer2.length() < 8)
+				buffer2.insert(0, '0');
+			
+			buffer.append(buffer2.toString());
+			
+			//buffer.append(""+(int)(b & 0xFF));
 			//if(i%1000 == 0)
 				//System.out.println(i);
 			i++;
 		}
+		return buffer;
+	}*/
+	
+	public static StringBuffer toString(byte[] bytes)
+	{
+		StringBuffer buffer = new StringBuffer(bytes.length*8);
+		
+		for(byte b : bytes)
+		{
+			for (int i = 0; i < 8; i++)  
+		    {  
+		        buffer.append(b & 1);  
+		        b >>= 1;  
+		    }
+		}
+		
 		return buffer;
 	}
 	

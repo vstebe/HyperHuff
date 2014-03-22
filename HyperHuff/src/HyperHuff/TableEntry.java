@@ -14,7 +14,7 @@ public class TableEntry implements Comparable {
 	
 	public byte[] toBytes()
 	{
-		System.out.println("code : " + value + " "  + code);
+		//System.out.println("code : " + value + " "  + code);
 		StringBuffer buffer = new StringBuffer(code);
 		byte val = (byte)value;
 		byte[] bytes = new byte[(int)Math.ceil(((double)buffer.length())/8.f)];
@@ -29,6 +29,10 @@ public class TableEntry implements Comparable {
 		
 		System.arraycopy(bytes, 0, res, 2, bytes.length);
 		
+		TableEntry entry2 = fromBytes(res);
+		if(!entry2.code.equals(code))
+			System.out.println("erreur : " + code +  " " + entry2.code);
+		
 		return res;
 	}
 	
@@ -38,14 +42,14 @@ public class TableEntry implements Comparable {
 		byte[] codeBytes = Arrays.copyOfRange(bytes, 2, bytes.length);
 		String code = StringByte.toString(codeBytes).toString();
 		int codeLength = (int) bytes[1];
-		System.out.println("l" + codeLength+ " " + code);
-		if(codeLength>=8)
+		//System.out.println("l" + codeLength+ " " + code);
+		if(codeLength>8)
 			code = code.substring(0, (int)bytes[1]);
 		else
-			code = code.substring(8-codeLength, codeLength+1);
+			code = code.substring(0, codeLength);
 		
 		TableEntry entry = new TableEntry(s, code);
-		System.out.println("code : " +entry.value + " "  + entry.code);
+		//System.out.println("code : " +entry.value + " "  + entry.code);
 		return entry;
 		
 	}
