@@ -12,22 +12,25 @@ public class HyperHuff {
 	public static void main(String[] args) {
 		
 		
-
-		System.out.println("Compression de Huffman");
-		System.out.println("1. Compression PGM -> HUF");
-		System.out.println("2. Décompression HUF -> PGM");
-		System.out.println("Choix ?");
-
-		Scanner s = new Scanner(System.in);
-		
-		
-		int res = s.nextInt();
-		
-		if(res == 1)
+		if(args.length != 2)
 		{
-			System.out.println("Adresse du PGM :");
-			String filename = s.next();
-			String filenameOut = filename.substring(0,filename.lastIndexOf('.')) + ".huf";
+			System.out.println("Usage : file.pgm file.huf (compression");
+			System.out.println("	ou  file.huf file.pgm (décompression)");
+			return;
+		}
+		
+		String filename = args[0];
+		String filenameOut = args[1];
+		
+		if(!(new File(filename)).exists())
+		{
+			System.out.println("Le fichier "+ filename + " n'existe pas");
+			return;
+		}
+		
+		if(args[0].endsWith(".pgm"))
+		{
+			
 			
 			GreyImage img;
 			try {
@@ -48,9 +51,6 @@ public class HyperHuff {
 			
 		} else {
 			
-			System.out.println("Adresse du HUF :");
-			String filename = s.next();
-			String filenameOut = filename.substring(0,filename.lastIndexOf('.')) + ".pgm";
 			
 			GreyImage img;
 			try {
@@ -70,7 +70,6 @@ public class HyperHuff {
 			}
 		}
 		
-		s.close();
 	}
 
 }
